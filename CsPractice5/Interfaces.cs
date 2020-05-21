@@ -1,0 +1,34 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CsPractice5
+{
+    interface ITrial
+    {
+        String TheTrial { get; set; }
+        Boolean Result { get; set; }
+
+        string ToString();
+    }
+
+    interface ITest : ITrial
+    {
+        QuestionItem[] Questions { get; set; }
+        Double Mark { get; set; }
+        Double MaxMark { get; set; }
+    }
+
+    interface IExam : ITest
+    {
+        String StudName { get; set; }
+        String InfAboutStud { get; set; }
+    }
+
+    interface IFinalExam : IExam
+    {
+        DateTime Date { get; set; }
+    }
+}
