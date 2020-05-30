@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CsPractice5
 {
@@ -83,20 +79,29 @@ namespace CsPractice5
         QuestionItem[] questions;
         double mark;
         double maxMark;
-
+        int count = 0;
         public QuestionItem[] Questions { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public double Mark { get => mark; set => mark = value; }
         public double MaxMark { get => maxMark; set => maxMark = value; }
         public string TheTrial { get => theTrial; set => theTrial = value; }
         public bool Result { get => result; set => result = value; }
 
-        public Test() {}
+        public Test() { }
 
         public Test(string theTrial, int amountOfQuestions, int maxMark)
-        {  
+        {
             this.theTrial = theTrial;
             questions = new QuestionItem[amountOfQuestions];
             this.maxMark = maxMark;
+        }
+
+        public void InitQuestions(string question, string[] answers, uint numOfRightAns, double valueOfQuestion)
+        {
+            if (count < question.Length)
+            {
+                if (questions[count].InitQuestion(question, answers, numOfRightAns, valueOfQuestion))
+                    count++;
+            }
         }
 
         string ITrial.ToString()
@@ -114,6 +119,7 @@ namespace CsPractice5
         double maxMark;
         String studName;
         String infAboutStud;
+        int count = 0;
         string IExam.StudName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         string IExam.InfAboutStud { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         QuestionItem[] ITest.Questions { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -124,13 +130,22 @@ namespace CsPractice5
 
         public Exam() { }
 
-        public Exam(string studName, string infAboutStud,string theTrial, double maxMark, int amountOfQuestions)
+        public Exam(string studName, string infAboutStud, string theTrial, double maxMark, int amountOfQuestions)
         {
             this.studName = studName;
             this.infAboutStud = infAboutStud;
             this.theTrial = theTrial;
             this.maxMark = maxMark;
             this.questions = new QuestionItem[amountOfQuestions];
+        }
+
+        public void InitQuestions(string question, string[] answers, uint numOfRightAns, double valueOfQuestion)
+        {
+            if (count < question.Length)
+            {
+                if (questions[count].InitQuestion(question, answers, numOfRightAns, valueOfQuestion))
+                    count++;
+            }
         }
 
         string ITrial.ToString()
@@ -149,6 +164,7 @@ namespace CsPractice5
         String studName;
         String infAboutStud;
         DateTime examDate;
+        int count = 0;
         DateTime IFinalExam.Date { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         string IExam.StudName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         string IExam.InfAboutStud { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -160,7 +176,7 @@ namespace CsPractice5
 
         public FinalExam() { }
 
-        public FinalExam (string studName, string infAboutStud, string theTrial, double maxMark, int amountOfQuestions, DateTime examDate)
+        public FinalExam(string studName, string infAboutStud, string theTrial, double maxMark, int amountOfQuestions, DateTime examDate)
         {
             this.studName = studName;
             this.infAboutStud = infAboutStud;
@@ -168,6 +184,14 @@ namespace CsPractice5
             this.maxMark = maxMark;
             this.examDate = examDate;
             this.questions = new QuestionItem[amountOfQuestions];
+        }
+        public void InitQuestions(string question, string[] answers, uint numOfRightAns, double valueOfQuestion)
+        {
+            if (count < question.Length)
+            {
+                if (questions[count].InitQuestion(question, answers, numOfRightAns, valueOfQuestion))
+                    count++;
+            }
         }
 
         string ITrial.ToString()
