@@ -1,30 +1,18 @@
-﻿using System;
-
-namespace CsPractice5
+﻿namespace CsPractice5
 {
     interface ITrial
     {
-        String TheTrial { get; set; }
-        Boolean Result { get; set; }
+        string TheTrial { get; }
+        bool Result { get; }
 
-        string ToString();
+        void Edit(string theTrial, bool result);
     }
 
     interface ITest : ITrial
     {
-        QuestionItem[] Questions { get; set; }
-        Double Mark { get; set; }
-        Double MaxMark { get; set; }
-    }
+        float Mark { get; }
+        float MaxMark { get; }
 
-    interface IExam : ITest
-    {
-        String StudName { get; set; }
-        String InfAboutStud { get; set; }
-    }
-
-    interface IFinalExam : IExam
-    {
-        DateTime Date { get; set; }
+        void Edit(string theTrial, bool result, float mark, float maxMark);
     }
 }

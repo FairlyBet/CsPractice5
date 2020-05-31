@@ -9,6 +9,5 @@ namespace CsPractice5
         {
             InitializeComponent();
         }
-
     }
 }

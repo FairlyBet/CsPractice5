@@ -2,57 +2,6 @@
 
 namespace CsPractice5
 {
-    struct QuestionItem
-    {
-        String question;
-        String[] answers;
-        UInt32 numOfRightAns;
-        UInt32 numOfAnswer;
-        Double valueOfQuestion;
-        public Double ValueOfQuestion { get => valueOfQuestion; }
-
-        public Boolean InitQuestion(string question, string[] answers, uint numOfRightAns, double valueOfQuestion)
-        {
-            if (numOfRightAns < answers.Length && numOfRightAns >= 0)
-            {
-                this.question = question;
-                this.numOfRightAns = numOfRightAns;
-                this.valueOfQuestion = valueOfQuestion;
-                this.answers = answers;
-
-                return true;
-            }
-            else return false;
-        }
-
-        public Boolean MakeAnswer(UInt32 numOfAnswer)
-        {
-            if (numOfAnswer >= 0 && numOfAnswer < answers.Length)
-            {
-                this.numOfAnswer = numOfAnswer;
-                return true;
-            }
-            else return false;
-        }
-
-        public Double CheckAns()
-        {
-            if (numOfAnswer == numOfRightAns)
-                return valueOfQuestion;
-            else return 0;
-        }
-
-        public override string ToString()
-        {
-            string line = "{question}:\n";
-            for (int i = 0; i < answers.Length; i++)
-            {
-                line += $"{answers[i]}\t";
-            }
-            return line;
-        }
-    }
-
     class Trial : ITrial
     {
         string theTrial;
@@ -60,143 +9,110 @@ namespace CsPractice5
         public string TheTrial { get => theTrial; set => theTrial = value; }
         public bool Result { get => result; set => result = value; }
 
-        public Trial(string theTrial = "", bool result = false)
+        public Trial() { }
+
+        public Trial(string theTrial, bool result)
         {
             this.theTrial = theTrial;
             this.result = result;
         }
 
-        string ITrial.ToString()
+        public void Edit(string theTrial, bool result)
         {
-            return $"The trial: {theTrial} {(result == true ? " is done" : " isn't done")}";
+            this.theTrial = theTrial;
+            this.result = result;
+        }
+
+        public override string ToString()
+        {
+            return $"{theTrial} {(result == true ? "is completed" : "isn't completed")}";
         }
     }
 
-    class Test : ITest
+    class Test : Trial, ITest
     {
-        string theTrial;
-        bool result;
-        QuestionItem[] questions;
-        double mark;
-        double maxMark;
-        int count = 0;
-        public QuestionItem[] Questions { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double Mark { get => mark; set => mark = value; }
-        public double MaxMark { get => maxMark; set => maxMark = value; }
-        public string TheTrial { get => theTrial; set => theTrial = value; }
-        public bool Result { get => result; set => result = value; }
+        float mark;
+        float maxMark;
+        public float Mark { get => mark; set => mark = value; }
+        public float MaxMark { get => maxMark; set => maxMark = value; }
 
         public Test() { }
 
-        public Test(string theTrial, int amountOfQuestions, int maxMark)
+        public Test(string theTrial, bool result, float mark, float maxMark)
         {
-            this.theTrial = theTrial;
-            questions = new QuestionItem[amountOfQuestions];
+            base.TheTrial = theTrial;
+            base.Result = result;
+            this.mark = mark;
             this.maxMark = maxMark;
         }
 
-        public void InitQuestions(string question, string[] answers, uint numOfRightAns, double valueOfQuestion)
+        public void Edit(string theTrial, bool result, float mark, float maxMark)
         {
-            if (count < question.Length)
-            {
-                if (questions[count].InitQuestion(question, answers, numOfRightAns, valueOfQuestion))
-                    count++;
-            }
+            base.Edit(theTrial, result);
+            this.mark = mark;
+            this.maxMark = maxMark;
         }
 
-        string ITrial.ToString()
+        public override string ToString()
         {
-            return $"{theTrial}\nMark: {mark}/{maxMark} - {(result == true ? " passed" : " isn't passed")}";
+            return $"{base.ToString()}\n{mark}/{maxMark}";
         }
     }
 
-    class Exam : IExam
+    class Exam : Test
     {
-        string theTrial;
-        bool result;
-        QuestionItem[] questions;
-        double mark;
-        double maxMark;
-        String studName;
-        String infAboutStud;
-        int count = 0;
-        string IExam.StudName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        string IExam.InfAboutStud { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        QuestionItem[] ITest.Questions { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        double ITest.Mark { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        double ITest.MaxMark { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        string ITrial.TheTrial { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        bool ITrial.Result { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        string fullInformation;
+        public string FullInformation { get => fullInformation; set => fullInformation = value; }
 
         public Exam() { }
 
-        public Exam(string studName, string infAboutStud, string theTrial, double maxMark, int amountOfQuestions)
+        public Exam(string theTrial, bool result, float mark, float maxMark, string fullInformation)
         {
-            this.studName = studName;
-            this.infAboutStud = infAboutStud;
-            this.theTrial = theTrial;
-            this.maxMark = maxMark;
-            this.questions = new QuestionItem[amountOfQuestions];
+            base.TheTrial = theTrial;
+            base.Result = result;
+            base.Mark = mark;
+            base.MaxMark = maxMark;
+            this.fullInformation = fullInformation;
         }
 
-        public void InitQuestions(string question, string[] answers, uint numOfRightAns, double valueOfQuestion)
+        public void Edit(string theTrial, bool result, float mark, float maxMark, string fullInformation)
         {
-            if (count < question.Length)
-            {
-                if (questions[count].InitQuestion(question, answers, numOfRightAns, valueOfQuestion))
-                    count++;
-            }
+            this.fullInformation = fullInformation;
+            base.Edit(theTrial, result, mark, maxMark);
         }
 
-        string ITrial.ToString()
+        public override string ToString()
         {
-            return $"{studName}, {infAboutStud}\n{theTrial}\n{mark}/{maxMark} {(result == true ? " passed" : " isn't passed")}";
+            return $"{fullInformation}\n{base.ToString()}";
         }
     }
 
-    class FinalExam : IFinalExam
+    class FinalExam : Exam
     {
-        string theTrial;
-        bool result;
-        QuestionItem[] questions;
-        double mark;
-        double maxMark;
-        String studName;
-        String infAboutStud;
         DateTime examDate;
-        int count = 0;
-        DateTime IFinalExam.Date { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        string IExam.StudName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        string IExam.InfAboutStud { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        QuestionItem[] ITest.Questions { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        double ITest.Mark { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        double ITest.MaxMark { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        string ITrial.TheTrial { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        bool ITrial.Result { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public DateTime ExamDate { get => examDate; }
 
         public FinalExam() { }
 
-        public FinalExam(string studName, string infAboutStud, string theTrial, double maxMark, int amountOfQuestions, DateTime examDate)
+        public FinalExam(string theTrial, bool result, float mark, float maxMark, string fullInformation, DateTime examDate)
         {
-            this.studName = studName;
-            this.infAboutStud = infAboutStud;
-            this.theTrial = theTrial;
-            this.maxMark = maxMark;
+            base.TheTrial = theTrial;
+            base.Result = result;
+            base.Mark = mark;
+            base.MaxMark = maxMark;
+            base.FullInformation = fullInformation;
             this.examDate = examDate;
-            this.questions = new QuestionItem[amountOfQuestions];
-        }
-        public void InitQuestions(string question, string[] answers, uint numOfRightAns, double valueOfQuestion)
-        {
-            if (count < question.Length)
-            {
-                if (questions[count].InitQuestion(question, answers, numOfRightAns, valueOfQuestion))
-                    count++;
-            }
         }
 
-        string ITrial.ToString()
+        public void Edit(string theTrial, bool result, float mark, float maxMark, string fullInformation, DateTime examDate)
         {
-            return $"{studName}, {infAboutStud}\n{theTrial} - {examDate}\n{mark}/{maxMark} {(result == true ? " passed" : " isn't passed")}";
+            this.examDate = examDate;
+            base.Edit(theTrial, result, mark, maxMark, fullInformation);
+        }
+
+        public override string ToString()
+        {
+            return $"{examDate}\n{base.ToString()}";
         }
     }
 }
